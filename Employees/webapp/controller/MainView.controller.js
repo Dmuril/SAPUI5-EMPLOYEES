@@ -15,30 +15,7 @@ sap.ui.define([
             var oView = this.getView();
             var i18nBundle = oView.getModel("i18n").getResourceBundle();
 
-            // var oJSON = {
-            //     employeeId : "12345",
-            //     countrykey : "US",
-            //     listCountry : [
-            //         {
-            //             key : "US",
-            //             text : i18nBundle.getText("countryUS")
-            //         },
-            //         {
-            //             key : "UK",
-            //             text : i18nBundle.getText("countryUK")
-            //         },
-            //         {
-            //             key : "ES",
-            //             text : i18nBundle.getText("countryES")
-            //         }
-            //     ]
-            // };
-
-            //oJSONModel.setData(oJSON);
             oJSONModel.loadData("./localService/mockdata/Employees.json", false);
-            // oJSONModel.attachRequestCompleted(function(oEventMovel){
-            //     console.log(JSON.stringify(oJSONModel.getData()));
-            // });
             oView.setModel(oJSONModel);
         } 
 
@@ -67,7 +44,15 @@ sap.ui.define([
             oModel.setProperty("/CountryKey", "");
         }
 
+        function showPostalCode (oEvent) {
 
+            var itemPressed = oEvent.getSource();
+            var oContext = itemPressed.getBindingContext();
+            var objectContext = oContext.getObject();
+
+            sap.m.MessageToast.show(objectContext.PostalCode);
+
+        }
 
         var Main = Controller.extend("logaligroup.Employees.controller.MainView", {});
 
@@ -83,6 +68,8 @@ sap.ui.define([
         Main.prototype.onInit = onInit;
         Main.prototype.onFilter = onFilter;
         Main.prototype.onClearFilter = onClearFilter;
+        Main.prototype.showPostalCode =showPostalCode;
+
         return Main;
     }
 );
