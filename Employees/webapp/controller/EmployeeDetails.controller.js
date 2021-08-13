@@ -1,3 +1,6 @@
+/* eslint-disable no-undef */
+//@ts-nocheck 
+
 sap.ui.define([
     "sap/ui/core/mvc/Controller",
     "logaligroup/Employees/model/formatter"
@@ -5,7 +8,7 @@ sap.ui.define([
 
 
     function onInit() {
-
+        this._bus = sap.ui.getCore().getEventBus();
     };
 
     function onCreateIncidence() {
@@ -20,7 +23,7 @@ sap.ui.define([
         tableIncidence.addContent(newIncidence);
     };
 
-
+/*
     function onDeleteIncedence(oEvent) {
 
         var tableIncidence = this.getView().byId("tableIncidence");
@@ -40,6 +43,39 @@ sap.ui.define([
         for (var j in tableIncidence.getContent()) {
             tableIncidence.getContent()[j].bindElement("incidenceModel>/" + j);
         }
+    };
+*/
+    function onDeleteIncidence(oEvent) {
+        var contextObjec = oEvent.getSource().getBindingContext("incidenceModel").getObject();
+        this._bus.publish("incidence", "onDeleteIncidence", { 
+            IncidenceId : contextObjec.IncidenceId,
+            SapId : contextObjec.SapId,
+            EmployeeId : contextObjec.EmployeeId,
+         });
+    };
+
+    function onSaveIncident(oEvent) {
+        var incidence = oEvent.getSource().getParent().getParent();
+        var incidenceRow = incidence.getBindingContext("incidenceModel");
+        this._bus.publish("incidence", "onSaveIncident", { incidenceRow: incidenceRow.sPath.replace('/', '') })
+    }
+
+    function updateIncidenceCreationDate(oEvent) {
+        var context = oEvent.getSource().getBindingContext("incidenceModel");
+        var contextObjec = context.getObject();
+        contextObjec.CreationDateX = true;
+    }
+
+    function updateIncidenceReason(oEvent) {
+        var context = oEvent.getSource().getBindingContext("incidenceModel");
+        var contextObjec = context.getObject();
+        contextObjec.ReasonX = true;
+    }
+
+    function updateIncidenceType(oEvent) {
+        var context = oEvent.getSource().getBindingContext("incidenceModel");
+        var contextObjec = context.getObject();
+        contextObjec.TypeX = true;
     }
 
     var Main = Controller.extend("logaligroup.Employees.controller.EmployeeDetails", {});
@@ -47,8 +83,11 @@ sap.ui.define([
     Main.prototype.onInit = onInit;
     Main.prototype.onCreateIncidence = onCreateIncidence;
     Main.prototype.Formatter = formatter;
-    Main.prototype.onDeleteIncedence = onDeleteIncedence;
-
+    Main.prototype.onDeleteIncedence = onDeleteIncidence;
+    Main.prototype.onSaveIncident = onSaveIncident;
+    Main.prototype.updateIncidenceCreationDate = updateIncidenceCreationDate;
+    Main.prototype.updateIncidenceReason = updateIncidenceReason;
+    Main.prototype.updateIncidenceType = updateIncidenceType;
     return Main;
 
 });

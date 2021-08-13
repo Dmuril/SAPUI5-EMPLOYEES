@@ -6,7 +6,7 @@ sap.ui.define([], function () {
 
         if (date) {
             var dateNow = new Date();
-            debugger;
+
             var dateFormat = sap.ui.core.format.DateFormat.getDateInstance({ pattern: "yyyy/MM/dd" });
             var dateNowFormat = new Date(dateFormat.format(dateNow));
 

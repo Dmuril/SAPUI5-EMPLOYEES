@@ -8,9 +8,15 @@
     {
       "authenticationType": "none",
       "csrfProtection": false,
-      "source": "^/Northwind/V2/Northwind/Northwind.svc/(.*)$",
+      "source": "^/Northwind/(.*)$",
       "destination": "Northwind",
       "target": "$1"
+    },
+    {
+      "authenticationType": "none",
+      "csrfProtection": false,
+      "source": "^/sap/opu/odata/sap/YSAPUI5_SRV_01/",
+      "destination": "logaliERP"
     },
     {
       "source": "^(.*)$",
