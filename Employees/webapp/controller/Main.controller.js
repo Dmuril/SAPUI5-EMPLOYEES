@@ -1,8 +1,9 @@
 /* eslint-disable no-undef */
 //@ts-nocheck
 sap.ui.define([
-    "sap/ui/core/mvc/Controller"
-], function (Controller) {
+    "sap/ui/core/mvc/Controller",
+    "sap/m/MessageBox"
+], function (Controller, MessageBox) {
 
     return Controller.extend("logaligroup.Employees.controller.Main", {
 
@@ -90,7 +91,8 @@ sap.ui.define([
                 this.getView().getModel("incidenceModel").create("/IncidentsSet", body, {
                     success: function () {
                         this.onReadODataIncidence.bind(this)(employeeId.toString());
-                        sap.m.MessageToast.show(oResourceBundle.getText("odataSaveOK"));
+                        MessageBox.success(oResourceBundle.getText("odataSaveOK"));
+                        //sap.m.MessageToast.show(oResourceBundle.getText("odataSaveOK"));
                     }.bind(this),
                     error: function (e) {
                         sap.m.MessageToast.show(oResourceBundle.getText("odataSaveKO"));
@@ -142,6 +144,8 @@ sap.ui.define([
                     tableIncidence.removeAllContent();
 
                     for (var incidence in data.results) {
+                        data.results[incidence]._ValidateDate = true;
+                        data.results[incidence].EnabledSave = false;
                         var newIncidence = sap.ui.xmlfragment("logaligroup.Employees.fragment.NewIncidence", this._detailEmployeeView.getController());
                         this._detailEmployeeView.addDependent();
                         newIncidence.bindElement("incidenceModel>/" + incidence);
